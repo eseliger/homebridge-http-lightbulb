@@ -187,6 +187,16 @@ function HTTP_LIGHTBULB(log, config) {
             this.homebridgeService.getCharacteristic(Characteristic.On).updateValue(value);
         });
         this.pullTimer.start();
+
+        const tempTimer = new PullTimer(this.log, config.pullInterval, this.getColorTemperature.bind(this), value => {
+            this.homebridgeService.getCharacteristic(Characteristic.ColorTemperature).updateValue(value);
+        });
+        tempTimer.start();
+
+        const brightnessTimer = new PullTimer(this.log, config.pullInterval, this.getBrightness.bind(this), value => {
+            this.homebridgeService.getCharacteristic(Characteristic.Brightness).updateValue(value);
+        });
+        brightnessTimer.start();
     }
 
     /** @namespace config.notificationID */
